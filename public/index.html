@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>שידרוגים</title>
+		<link rel='stylesheet' type='text/css' href='css/style.css' />
+		<link rel="preload" href="css/@fortawesome/fontawesome-free/css/all.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="css/@fortawesome/fontawesome-free/css/all.css"></noscript>
+        
+	</head>
+	<body>
+		<div class='backgroundDiv'>
+			<div id="particles-js"></div>
+		</div>
+		<header>
+			<div class='grid'>
+				<h1>שידרוגים</h1>
+				<a href='settings.html'><i class="fas fa-cog"></i>הגדרות</a>
+			</div>
+		</header>
+		
+		<section class='mainScreen'>
+			<h1>מה משדרגים היום?</h1>
+			<button id='groupBtn'><i class="fas fa-layer-group"></i>קבוצת כתובות</button>
+			<h2>או סגמנט?</h2>
+			<div class='segmentBox'>
+				<input type='text' placeholder="189" />
+				<i class="fas fa-circle"></i>
+				<input type='text' placeholder="1" />
+				<i class="fas fa-circle"></i>
+				<input type='text' placeholder="5" />
+			</div>
+			<button id='continuebtn'>המשך<i class="fas fa-angle-left"></i></button>
+		</section>
+		
+		<section class='setGroupSection'>
+			<h1>הגדר קבוצת כתובות</h1>
+			<label id='mainLabel'>כתובות רכיבים מופרדות בשורות:</label>
+			<textarea id='addressGroupTextare' placeholder='189.1.1.12&#13;&#10;190.3.5.11'></textarea>
+			<div class='moreConfigurationsDiv'>
+				<div class='configDiv'>
+					<label for='upgradeOption'>רק פלט גרסאות</label>
+					<input type='checkbox' checked='checked' id='upgradeOption' />
+				</div>
+				<span>* כאשר אופציה זו דלוקה לא יתבצעו שידרוגים אלא תוכל לצפות בפלט הגרסאות</span>
+			</div>
+
+			<button id='backToMainBtn'><i class="fas fa-angle-right"></i>חזור</button>
+			<button id='finishGroupSetBtn'>המשך<i class="fas fa-angle-left"></i></button>
+		</section>
+		
+		<section class='setGUserSection'>
+			<h1>הכנס יוזר</h1>
+			
+			<button id='backStep' data-step=''><i class="fas fa-angle-right"></i>חזור</button>
+			<button id='finishGUserBtn'>המשך<i class="fas fa-angle-left"></i></button>
+		</section>
+
+
+		<script src='js/config.js'></script>
+		<script src='js/post.js'></script>
+		<script src='js/jquery.min.js'></script>
+		<script src='js/index.js'></script>
+		<script src="js/particles.min.js"></script>
+		<script>
+			particlesJS.load('particles-js', 'assets/particles.json', function() {
+				console.log('callback - particles.js config loaded');
+			});
+		</script>
+	</body>
+</html>

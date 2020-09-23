@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>שידרוגים</title>
+		<link rel='stylesheet' type='text/css' href='css/style.css' />
+		<link rel="preload" href="css/@fortawesome/fontawesome-free/css/all.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="css/@fortawesome/fontawesome-free/css/all.css"></noscript>
+        
+	</head>
+	<body>
+		<div class='backgroundDiv'>
+			<div id="particles-js"></div>
+		</div>
+		<div class='backdrop'></div>
+		<header>
+			<div class='grid'>
+				<h1>שידרוגים - הגדרות</h1>
+				<a href='index.html'>ראשי</a>
+			</div>
+		</header>
+		
+		<section class='home'>
+			<div class='grid'>
+				<section class='setting-section'>
+					<h1>גרסאות מומלצות<span id='fname'></span></h1>
+					<button class='saveBtn' data-set='recommended_version' id='set1Btn'><i class="far fa-save"></i>שמור</button>
+					<div class='tableDiv'>
+						<table id='recommended_version'>
+							<tr class='ftr'>
+								<td>
+									<input type='text' />
+								</td>
+								<td>
+									<input type='text' value='fsds' />
+								</td>
+							</tr>
+							<tr class='str'>
+								<td>
+									<input type='text' />
+								</td>
+								<td>
+									<input type='text' value='fsds' />
+								</td>
+							</tr>
+						</table>
+					</div>
+				</section>
+			</div>
+		</section>
+		<div class='loader'>
+			<img src='assets/loader.gif' /><span>טוען..</span>
+		</div>
+		<div class='confirmationBox'>
+			<h1>האם אתה בטוח?</h1>
+			<button id='continue'>המשך</button>
+			<button id='cancel'>בטל</button>
+		</div>
+
+		<script src='js/config.js'></script>
+		<script src='js/post.js'></script>
+		<script src='js/jquery.min.js'></script>
+		<script src='js/index.js'></script>
+		<script src="js/particles.min.js"></script>
+		<script>
+			var DATA = {}
+
+			particlesJS.load('particles-js', 'assets/particles.json', function() {
+				console.log('callback - particles.js config loaded');
+			});
+
+			$('.backdrop').click(() => {
+				$('.confirmationBox').fadeOut()
+				$('.backdrop').fadeOut()
+			})
+
+
+			const confirm = (callback) => {
+				$('.backdrop').fadeIn()
+				$('.confirmationBox').fadeIn()
+
+				document.getElementById('continue').addEventListener('click', () => {
+					$('.backdrop').fadeOut()
+					$('.confirmationBox').fadeOut()
+					return callback(true)
+				})
+				document.getElementById('cancel').addEventListener('click', () => {
+					$('.backdrop').fadeOut()
+					$('.confirmationBox').fadeOut()
+					return callback(false)
+				})
+			}
+
+			const setLoaderState = (state) => {
+				$('.loader').css('display',state)
+			}
+
+			let loadedTextState = true
+			setInterval(() => {
+				if(loadedTextState){
+					loadedTextState = false
+					$('.loader span').html('טוען..')
+				}else{
+					loadedTextState = true
+					$('.loader span').html('טוען...')
+				}
+			}, 350)
+
+			$('#set1Btn').click(function(){
+				confirm((result) => {
+					if(result){
+						let sheets = DATA[$(this).data('set')].SheetNames
+						let sheet = DATA[$(this).data('set')].Sheets[sheets[0]]
+					
+						let maxRowVal = document.querySelectorAll('.tableDiv table tr').length - 1
+						let maxColumnVal = String.fromCharCode('A'.charCodeAt(0) + document.querySelector('.tableDiv table tr').querySelectorAll('td').length - 2)
+
+						
+						sheet['!ref'] = 'A1:' + maxColumnVal + maxRowVal
+						console.log("sheet['!ref']", sheet['!ref'])
+						Object.keys(sheet).forEach(key => {
+							if(key.charAt(0) != '!'){
+								delete sheet[key]
+							}
+						})
+						for(let i=1;i<=maxRowVal;i++){
+							for(let j='A'.charCodeAt(0);j<=maxColumnVal.charCodeAt(0);j++){
+								let char = String.fromCharCode(j)
+								let val = document.querySelector(`#${char}${i}`).value
+								//if(val != ''){
+									sheet[`${char}${i}`] = {
+										v: document.querySelector(`#${char}${i}`).value,
+										t: 's'
+									}
+								//}
+							}
+						}
+						console.log("sheet", sheet)
+						setLoaderState('block')
+						postData(`${config.server}/saveSet`, {
+							setting: $(this).data('set'),
+							spreadsheet: DATA[$(this).data('set')]
+						}).then(result => {
+							setLoaderState('none')
+							setTimeout(() => {
+								alert('ההגדרות נשמרו!')
+							}, 400)
+							console.log("result", result)
+						})
+					}
+				})
+
+				
+			})
+
+			$(document).on({
+				click: function(){
+					let set = $(this).data('set')
+					let column = $(this).data('column')
+					let sheet = DATA[set].Sheets[DATA[set].SheetNames[0]]
+					console.log("column", column)
+					console.log("Add column to sheet: ", sheet)
+
+					let maxColumnVal = maxColumn(sheet)
+					let maxRowVal = maxRow(sheet)
+					for(let i=maxColumnVal.charCodeAt(0);i>=column.charCodeAt(0)+1;i--){
+						let char = String.fromCharCode(i)
+						Object.keys(sheet).forEach(key => {
+							if(key.charAt(0) != '!'){
+								if(key.charAt(0) == char){
+									sheet[String.fromCharCode(i+1) + key.substring(1)] = sheet[key]
+									delete sheet[key]
+								}
+							}
+						})
+					}
+					for(let i=1;i<=maxRowVal;i++){
+						sheet[`${String.fromCharCode(column.charCodeAt(0)+1)}${i}`] = {
+							v: '',
+							t: 's'
+						}
+					}
+					console.log("sheet", sheet)
+					renderTable(set, sheet)
+				}
+			}, '.addColumnBtn')
+
+			$(document).on({
+				click: function(){
+					let set = $(this).data('set')
+					let column = $(this).data('column')
+					let sheet = DATA[set].Sheets[DATA[set].SheetNames[0]]
+
+					console.log("column", column)
+					console.log("remove column from sheet: ", sheet)
+
+					let maxColumnVal = maxColumn(sheet)
+					let maxRowVal = maxRow(sheet)
+
+					for(let i=1;i<=maxRowVal;i++){
+						delete sheet[`${String.fromCharCode(column.charCodeAt(0))}${i}`]
+					}
+
+					for(let i=column.charCodeAt(0)+1;i<=maxColumnVal.charCodeAt(0);i++){
+						let char = String.fromCharCode(i)
+						Object.keys(sheet).forEach(key => {
+							if(key.charAt(0) != '!'){
+								if(key.charAt(0) == char){
+									sheet[String.fromCharCode(i-1) + key.substring(1)] = sheet[key]
+									delete sheet[key]
+								}
+							}
+						})
+					}
+
+					console.log("sheet", sheet)
+					renderTable(set, sheet)
+				}
+			}, '.removeColumnBtn')
+
+
+			$(document).on({
+				click: function(){
+					let set = $(this).data('set')
+					let row = $(this).data('row')
+					let sheet = DATA[set].Sheets[DATA[set].SheetNames[0]]
+					console.log("row", row)
+					console.log("Add row to sheet: ", sheet)
+
+					let maxColumnVal = maxColumn(sheet)
+					let maxRowVal = maxRow(sheet)
+
+					for(let i=maxRowVal;i>=row+1;i--){
+						Object.keys(sheet).forEach(key => {
+							if(key.charAt(0) != '!'){
+								if(key.substring(1) == i){
+									sheet[key.charAt(0) + (parseInt(key.substring(1))+1)] = sheet[key]
+									delete sheet[key]
+								}
+							}
+						})
+					}
+					for(let i='A'.charCodeAt(0);i<=maxColumnVal.charCodeAt(0);i++){
+						sheet[`${String.fromCharCode(i)}${row+1}`] = {
+							v: '',
+							t: 's'
+						}
+					}
+					console.log("sheet", sheet)
+					renderTable(set, sheet)
+				}
+			}, '.addRowBtn')
+
+			$(document).on({
+				click: function(){
+					let set = $(this).data('set')
+					let row = $(this).data('row')
+					let sheet = DATA[set].Sheets[DATA[set].SheetNames[0]]
+					console.log("row", row)
+					console.log("Remove row from sheet: ", sheet)
+
+					let maxColumnVal = maxColumn(sheet)
+					let maxRowVal = maxRow(sheet)
+
+					for(let i='A'.charCodeAt(0);i<=maxColumnVal.charCodeAt(0);i++){
+						delete sheet[`${String.fromCharCode(i)}${row}`]
+					}
+					for(let i=row+1;i<=maxRowVal;i++){
+						Object.keys(sheet).forEach(key => {
+							if(key.charAt(0) != '!'){
+								if(key.substring(1) == i){
+									sheet[key.charAt(0) + (parseInt(key.substring(1))-1)] = sheet[key]
+									delete sheet[key]
+								}
+							}
+						})
+					}
+					console.log("sheet", sheet)
+					renderTable(set, sheet)
+				}
+			}, '.removeRowBtn')
+
+			$(document).on({
+				mouseover: function(){
+					$(this.querySelector('.addColumnBtn')).show()
+					$(this.querySelector('.removeColumnBtn')).show()
+				},
+				mouseleave:  function(){
+					$(this.querySelector('.addColumnBtn')).hide()
+					$(this.querySelector('.removeColumnBtn')).hide()
+				}
+			}, ".topTr td")
+
+			$(document).on({
+				mouseover: function(){
+					$(this.querySelector('.addRowBtn')).show()
+					$(this.querySelector('.removeRowBtn')).show()
+				},
+				mouseleave:  function(){
+					$(this.querySelector('.addRowBtn')).hide()
+					$(this.querySelector('.removeRowBtn')).hide()
+				}
+			}, ".cornerTd")
+
+
+			function maxRow(sheet){
+				let max = 0
+
+				Object.keys(sheet).forEach(key => {
+					let number = key.substring(1);
+					if(parseInt(number)){
+						number = parseInt(number)
+						if(number > max){
+							max = number
+						}
+					}
+				})
+
+				return max
+			}
+			function maxColumn(sheet){
+				let max = 0
+
+				Object.keys(sheet).forEach(key => {
+					let number = key.charCodeAt(0);
+					if(parseInt(number)){
+						if(number > max){
+							max = number
+						}
+					}
+				})
+
+				return String.fromCharCode(max)
+			}
+
+			function renderTable(tableId, sheet){
+				let table = $('#'+tableId)
+				table.html()
+
+				let filteredSheet = {}
+				let k = Object.keys(sheet).filter(key => key.charAt(0) != '!')
+				k.forEach(key => {
+					filteredSheet[key] = sheet[key]
+				})
+				console.log("filteredSheet", filteredSheet)
+				$('#fname').html(`${tableId}.xlsx`)
+				let maxRowVal = maxRow(filteredSheet)
+				let maxColumnVal = maxColumn(filteredSheet)
+
+				let html = ``
+				let tr_class = 'str'
+
+				html += `<tr class='${tr_class} topTr'><td class='cornerTd'></td>`
+				for(let j='A'.charCodeAt(0);j<=maxColumnVal.charCodeAt(0);j++){
+					html += `<td>${String.fromCharCode(j)}<span class='removeColumnBtn' data-set='${tableId}' data-column='${String.fromCharCode(j)}'><i class="fas fa-minus"></i></span><span class='addColumnBtn' data-set='${tableId}' data-column='${String.fromCharCode(j)}'><i class="fas fa-plus"></i></span></td>`
+				}
+				html += '</tr>'
+
+				for(let i=1;i<=maxRowVal;i++){
+					if(tr_class == 'ftr'){
+						tr_class = 'str'
+					}else{
+						tr_class = 'ftr'
+					}
+					html += `<tr class='${tr_class}'><td class='cornerTd'>${i}<span class='addRowBtn' data-set='${tableId}' data-row='${i}'><i class="fas fa-plus"></i></span><span class='removeRowBtn' data-set='${tableId}' data-row='${i}'><i class="fas fa-minus"></i></span></td>`
+
+					for(let j='A'.charCodeAt(0);j<=maxColumnVal.charCodeAt(0);j++){
+						let char = String.fromCharCode(j)
+						let val = filteredSheet[`${char}${i}`]
+						if(!val){
+							html += `${renderCell('', `${char}${i}`)}`
+						}else{
+							html += `${renderCell(val.v, `${char}${i}`)}`
+						}
+					}
+
+
+					html += '</tr>'
+				}
+
+
+				table.html(html)
+			}
+
+			function renderCell(val, cellIndex){
+				return `<td><input type='text' onClick="this.select();" id='${cellIndex}' data-cellindex='${cellIndex}' value='${val}' /></td>`
+			}
+
+			getData(`${config.server}/getSet?set=recommended_version`).then(res => {
+				console.log("res", res)
+
+				let sheets = res.set.SheetNames;
+				let sheet = res.set.Sheets[sheets[0]]
+			
+				DATA.recommended_version = res.set
+				renderTable('recommended_version', sheet)
+			})
+		</script>
+	</body>
+</html>
