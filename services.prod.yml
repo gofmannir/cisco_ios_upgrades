@@ -18,6 +18,6 @@ services:
     command: ["/wait-for-it.sh", "http://upgrade:5454/", "--", "nginx", "-g", "daemon off;"]
   upgrade:
     restart: always
-    image: upgrade:${TAG}
+    image: "upgrade:${TAG}"
     deploy:
       replicas: 1
