@@ -26,7 +26,7 @@ getData(`${config.server}/records/${recordId}`).then(result => {
 			
 		exampleSocket.onopen = function (event) {
 			exampleSocket.send("getState---"+recordId)
-			console.log("On open event")
+			console.log("On open eveent")
 			timer = setInterval(function () {
 				timestamp = new Date(timestamp.getTime() + interval * 1000);
 				document.getElementById('time').innerHTML = ("0" + timestamp.getMinutes()).slice(-2) + ':' + ("0" + timestamp.getSeconds()).slice(-2)
