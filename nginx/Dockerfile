@@ -1,6 +1,6 @@
 FROM nginx
 
-COPY ./nginx/nginx.conf ./etc/nginx/nginx.conf
+COPY ./nginx.conf ./etc/nginx/nginx.conf
 COPY ./wait-for-it.sh ./wait-for-it.sh
 
 EXPOSE 80
