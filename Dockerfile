@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 5454
 
-CMD ["node","run","start"]
+CMD ["npm","run","start"]
