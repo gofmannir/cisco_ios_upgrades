@@ -22,7 +22,7 @@ getData(`${config.server}/records/${recordId}`).then(result => {
 	if(result.status == 'OK'){
 		console.log("recordState", result.recordState)
 
-		let exampleSocket = new WebSocket("ws://localhost:8081/", "protocolOne");
+		let exampleSocket = new WebSocket("ws://localhost:3998/", "protocolOne");
 			
 		exampleSocket.onopen = function (event) {
 			exampleSocket.send("getState---"+recordId)
