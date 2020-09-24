@@ -1,3 +1,3 @@
 var config = {
-	"server": "http://localhost:5454"
+	"server": "http://3.236.51.136"
 }
