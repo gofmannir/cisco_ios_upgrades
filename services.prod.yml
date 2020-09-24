@@ -1,18 +1,19 @@
 version: '3.8'
+
 services:
-  proxy:
-    image: upgrade-nginx:TAG
-    restart: always
-    ports:
-      - '443:443'
-	  - '80:80'
-	  - '5000:5000'
-    deploy:
-      replicas: 1
-    depends_on:
-      - upgrade
-  upgrade:
-    restart: always
-    image: upgrade:TAG
-    deploy:
-      replicas: 1
+  	proxy:
+    	image: upgrade-nginx:TAG
+    	restart: always
+    	ports:
+    	  	- '443:443'
+		  	- '80:80'
+		  	- '5000:5000'
+    	deploy:
+      		replicas: 1
+    	depends_on:
+      		- upgrade
+	upgrade:
+		restart: always
+		image: upgrade:TAG
+    	deploy:
+      		replicas: 1
