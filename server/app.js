@@ -8,7 +8,7 @@ var bodyParser = require('body-parser')
 const xlsx = require("xlsx");
 
 const WebSocket = require('ws');
-const wss = new WebSocket.Server({ port: 3998 });
+const wss = new WebSocket.Server({ port: 8082 });
 
 
 wss.on('connection', function connection(ws) {
