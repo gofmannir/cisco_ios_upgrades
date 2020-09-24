@@ -4,20 +4,20 @@ services:
     image: nginx
     restart: always
     ports:
-        - '443:443'
-        - '80:80'
+      - '443:443'
+      - '80:80'
     volumes:
-        - ./nginx:/etc/nginx
-        #- ./nginx-f/nginx.conf:/etc/nginx/conf.d/default.conf
-        - ./wait-for-it.sh:/wait-for-it.sh
-        #- ./server/ssl:/etc/ssl/certs
+      - ./nginx:/etc/nginx
+      #- ./nginx-f/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./wait-for-it.sh:/wait-for-it.sh
+      #- ./server/ssl:/etc/ssl/certs
     deploy:
-        replicas: 1
+      replicas: 1
     depends_on:
-        - upgrade
-    command: ["/wait-for-it.sh", "http://upgrade:5454/, "--", "nginx", "-g", "daemon off;"]
+      - upgrade
+    command: ["/wait-for-it.sh", "http://upgrade:5454/", "--", "nginx", "-g", "daemon off;"]
   upgrade:
     restart: always
     image: gofmannir/upgrade:1.0
     deploy:
-        replicas: 1
+      replicas: 1
