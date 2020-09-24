@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>שידרוגים</title>
+		<link rel='stylesheet' type='text/css' href='css/style.css' />
+		<link rel="preload" href="css/@fortawesome/fontawesome-free/css/all.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="css/@fortawesome/fontawesome-free/css/all.css"></noscript>
+        
+	</head>
+	<body>
+		<div class='backgroundDiv'>
+			<div id="particles-js"></div>
+		</div>
+		<header>
+			<div class='grid'>
+				<h1>שידרוגים</h1>
+				<a href='settings.html'><i class="fas fa-cog"></i>הגדרות</a>
+				<a href='index.html'>ראשי</a>
+			</div>
+		</header>
+		
+		<section class='home'>
+			<div class='grid'>
+				<div class='running'>
+					<h1>מריץ סקריפט, אנא המתן..
+						<BR>
+						<img src='assets/loader.gif' />
+						<span id='time'>00:00</span>
+					</h1>
+				</div>
+				<div class='broken'>
+					<h1>משהו נשבר :(<BR>
+						<span>פנה למנהל המערכת</span>
+					</h1>
+				</div>
+				<div class='finished'>
+					<h1>תוצאות</h1>
+					<button id='upgradeSelectedBtn'><i class="fas fa-wrench"></i>שדרג רכיבים שנבחרו</button>
+					<table id='results_table'>
+						<tr class='topTr'>
+							<td class='checksTd'>
+
+							</td>
+							<td>
+								Device
+							</td>
+							<td>
+								IP
+							</td>
+							<td>
+								Serial
+							</td>
+							<td>
+								Model
+							</td>
+							<td>
+								Current Version	
+							</td>
+							<td>
+								Rec` Version	
+							</td>
+							<td>
+								Next Boot image
+							</td>
+							<td>
+								Up Time
+							</td>
+						</tr>
+						<tr class='ftr'>
+							<td class='checksTd'><label for='randedId_123'></label><input type='checkbox' id='randedId_123' value='123.123.123.123'/></td>
+							<td><span class='name'>Sw_123_22</span></td>
+							<td><span class='ip'>123.234.34.6</span></td>
+							<td><span class='serial'>FOC23414GS</span></td>
+							<td><span class='model'>WS-C2960-48TC-L</span></td>
+							<td><span class='version'>16.04(SE).7</span></td>
+							<td><span class='rec_version'>16.06(SE).7</span></td>
+							<td><span class='next_boot'>kwlkf.thdfe.cisco.453sek9.bin</span></td>
+							<td><span class='up_time'>4 years 13 weeks</span></td>
+						</tr>
+						<tr class='str'>
+							<td class='checksTd'><label for='randedId_1223'></label><input type='checkbox' id='randedId_1223' value='123.123.123.123' /></td>
+							<td><span class='name'>Sw_123_22</span></td>
+							<td><span class='ip'>123.234.34.6</span></td>
+							<td><span class='serial'>FOC23414GS</span></td>
+							<td><span class='model'>WS-C2960-48TC-L</span></td>
+							<td><span class='version'>16.04(SE).7</span></td>
+							<td><span class='rec_version'>16.06(SE).7</span></td>
+							<td><span class='next_boot'>kwlkf.thdfe.cisco.453sek9.bin</span></td>
+							<td><span class='up_time'>4 years 13 weeks</span></td>
+						</tr>
+						<tr class='ftr device_not_updated'>
+							<td class='checksTd'><label for='randerdId_123'></label><input type='checkbox' id='randerdId_123' value='123.123.123.123' /></td>
+							<td><span class='name'>Sw_123_22</span></td>
+							<td><span class='ip'>123.234.34.6</span></td>
+							<td><span class='serial'>FOC23414GS</span></td>
+							<td><span class='model'>WS-C2960-48TC-L</span></td>
+							<td><span class='version'>16.04(SE).7</span></td>
+							<td><span class='rec_version'>16.06(SE).7</span></td>
+							<td><span class='next_boot'>kwlkf.thdfe.cisco.453sek9.bin</span></td>
+							<td><span class='up_time'>4 years 13 weeks</span></td>
+						</tr>
+						<tr class='str'>
+							<td class='checksTd'><label for='randedIrrd_1223'></label><input type='checkbox' id='randedIrrd_1223' value='123.123.123.123' /></td>
+							<td><span class='name'>Sw_123_22</span></td>
+							<td><span class='ip'>123.234.34.6</span></td>
+							<td><span class='serial'>FOC23414GS</span></td>
+							<td><span class='model'>WS-C2960-48TC-L</span></td>
+							<td><span class='version'>16.04(SE).7</span></td>
+							<td><span class='rec_version'>16.06(SE).7</span></td>
+							<td><span class='next_boot'>kwlkf.thdfe.cisco.453sek9.bin</span></td>
+							<td><span class='up_time'>4 years 13 weeks</span></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</section>
+
+
+		<script src='js/config.js'></script>
+		<script src='js/post.js'></script>
+		<script src='js/jquery.min.js'></script>
+		<script src='js/records.js'></script>
+		<script src="js/particles.min.js"></script>
+		<script>
+			particlesJS.load('particles-js', 'assets/particles.json', function() {
+				console.log('callback - particles.js config loaded');
+			});
+		</script>
+	</body>
+</html>
