@@ -5,7 +5,8 @@ services:
     restart: always
     ports:
       - '443:443'
-      - '80:80'
+	  - '80:80'
+	  - '5000:5000'
     deploy:
       replicas: 1
     depends_on:
