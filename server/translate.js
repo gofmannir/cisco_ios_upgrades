@@ -2,7 +2,7 @@
 const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
 const fs = require('fs');
-const { json } = require('body-parser');
+const path = require('path');
 
 
 var browser = ''
@@ -35,7 +35,7 @@ const translate = async (text) => {
 		if(txt != ''){
 			console.log("Translation:", txt)
 			clearInterval(timer)
-			fs.appendFileSync('translations.txt', `${text1}---${txt}\n`)
+			fs.appendFileSync(path.join(__dirname, 'translations.txt'), `${text1}---${txt}\n`)
 			process.exit(0)
 		}
 	}, 500)
