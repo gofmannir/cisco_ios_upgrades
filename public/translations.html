@@ -74,7 +74,7 @@
 			var input = document.getElementById('text');
 			input.focus();
 			input.select()
-			getData('http://3.236.234.75:8080/getTrans').then(res => {
+			getData('http://3.236.234.75/getTrans').then(res => {
 				console.log("Res", res)
 
 				let words = res.split('\n')
@@ -95,7 +95,7 @@
 				e.preventDefault()
 				let txt = document.getElementById('text').value
 
-				postData('http://3.236.234.75:8080/startTranslate', {txt}).then(res => {
+				postData('http://3.236.234.75/startTranslate', {txt}).then(res => {
 					words = res.split('\n')
 
 					html = ``
