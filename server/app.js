@@ -169,12 +169,12 @@ app.get('/getRecordOutput/:id', (req, res) => {
 
 app.post('/startTranslate', (req, res) => {
 	let txt = req.body.txt
-
-	let args = [path.join(__dirname, 'translate.js'), txt]
+	console.log("Starting script..")
+	let args = [path.join(__dirname, './translate.js'), txt]
 	const nodejs = spawn('node', args);
 
 	nodejs.stdout.on('data', function (data) {
-		console.log('Pipe data from python script ...')
+		console.log('Pipe data from python script ...', data.toString())
 	});
 	nodejs.stderr.on('data', function (data) {
 		console.log("err", data.toString())

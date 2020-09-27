@@ -9,6 +9,7 @@ var browser = ''
 
 
 async function launch(){
+	console.log("Opening browser..")
 	browser = await puppeteer.launch({headless: true, args: ["--no-sandbox"]})
 }
 
@@ -31,8 +32,8 @@ const translate = async (text) => {
 		html = await page.content()
 		$ = cheerio.load(html, {decodeEntities: false})
 		txt = $('span.translation span').text()
-		//console.log("Translation:", txt)
 		if(txt != ''){
+			console.log("Translation:", txt)
 			clearInterval(timer)
 			fs.appendFileSync('translations.txt', `${text1}---${txt}\n`)
 			process.exit(0)
