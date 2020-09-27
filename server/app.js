@@ -167,5 +167,29 @@ app.get('/getRecordOutput/:id', (req, res) => {
 	}
 })
 
+app.post('/startTranslate', (req, res) => {
+	let txt = req.body.txt
+
+	let args = ['translate.js', txt]
+	const nodejs = spawn('node', args);
+
+	nodejs.stdout.on('data', function (data) {
+		console.log('Pipe data from python script ...')
+	});
+	nodejs.stderr.on('data', function (data) {
+		console.log("err", data.toString())
+	});
+	
+	nodejs.on('close', (code) => {
+		let data = fs.readFileSync('translations.txt')
+		res.json(data.toString())
+	})
+})
+
+app.get('/getTrans', (req, res) => {
+	let data = fs.readFileSync('translations.txt')
+	res.json(data.toString())
+})
+
 
 module.exports = app

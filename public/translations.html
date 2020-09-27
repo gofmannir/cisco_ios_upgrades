@@ -1,0 +1,123 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<style>
+			html, body{
+				width: 100vw;
+				height: 100vh;
+				margin: 0px;
+				padding: 0px;
+				background: #efefef;
+				overflow: hidden;
+			}
+
+			p::-webkit-scrollbar{
+				display: none;
+			}
+			p{
+				position: absolute;
+				top: 30px;
+				left: 0px;
+				width: 100%;
+				height: calc(100% - 230px);
+				margin: 0px;
+				padding: 0px;
+				overflow: scroll;
+				
+			}
+
+			input[type='text']{
+				position: absolute;
+				bottom: 100px;
+				left: 20px;
+				width: calc(100% - 40px);
+				height: 70px;
+				font-size: 23px;
+				text-indent: 20px;
+			}
+
+			input[type='submit']{
+				position: absolute;
+				bottom: 20px;
+				left: 20px;
+				width: calc(100% - 40px);
+				height: 50px;
+				font-size: 23px;
+				background: #e39733;
+				border: none;
+				color: #fff;
+
+			}
+
+			p span{
+				display: inline-block;
+				line-height: 40px;
+				color: #000;
+				padding-left: 20px;
+				font-family: 'arial';
+				font-size: 22px;
+
+			}
+		</style>
+	</head>
+	<body>
+		<p>
+			
+		</p>
+		<form method='post'>
+			<input type='text' id='text' placeholder='Text..' />
+			<input type='submit' id='submit' value='Translate' /> 
+		</form>
+		<script src='./js/post.js'></script>
+		<script>
+			var input = document.getElementById('text');
+			input.focus();
+			input.select()
+			getData('http://3.236.234.75/getTrans').then(res => {
+				console.log("Res", res)
+
+				let words = res.split('\n')
+
+				let html = ``
+
+				for(word of words){
+					let w = word.split('---')
+					if(w[1] != undefined)
+						html += `<span>${w[0]} - <span>${w[1]}</span></span><BR>`
+				}
+
+				document.querySelector('p').insertAdjacentHTML('beforeend', html)
+				document.querySelector('p').scrollTop = document.querySelector('p').scrollHeight
+			})
+
+			document.getElementById('submit').addEventListener('click' , function(e){
+				e.preventDefault()
+				let txt = document.getElementById('text').value
+
+				postData('http://3.236.234.75/startTranslate', {txt}).then(res => {
+					words = res.split('\n')
+
+					html = ``
+
+					for(word of words){
+						let w = word.split('---')
+						if(w[1] != undefined)
+							html += `<span>${w[0]} - <span>${w[1]}</span></span><BR>`
+					}
+					document.querySelector('p').innerHTML = ''
+					document.querySelector('p').insertAdjacentHTML('beforeend', html)
+					document.querySelector('p').scrollTop = document.querySelector('p').scrollHeight
+					document.getElementById('text').value = ''
+					
+					body.scrollTop = 0
+				})
+				var input = document.getElementById('text');
+				input.focus();
+				input.select()
+				body.scrollTop = 0
+			})
+		</script>
+	</body>
+
+</html>
