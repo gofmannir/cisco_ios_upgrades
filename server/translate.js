@@ -9,7 +9,7 @@ var browser = ''
 
 
 async function launch(){
-	browser = await puppeteer.launch({headless: true})
+	browser = await puppeteer.launch({headless: true, args: ["--no-sandbox"]})
 }
 
 const translate = async (text) => {
