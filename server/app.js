@@ -170,7 +170,7 @@ app.get('/getRecordOutput/:id', (req, res) => {
 app.post('/startTranslate', (req, res) => {
 	let txt = req.body.txt
 
-	let args = ['translate.js', txt]
+	let args = [path.join(__dirname, 'translate.js'), txt]
 	const nodejs = spawn('node', args);
 
 	nodejs.stdout.on('data', function (data) {
