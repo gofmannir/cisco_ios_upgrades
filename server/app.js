@@ -181,13 +181,13 @@ app.post('/startTranslate', (req, res) => {
 	});
 	
 	nodejs.on('close', (code) => {
-		let data = fs.readFileSync('translations.txt')
+		let data = fs.readFileSync(path.join(__dirname, 'translations.txt'))
 		res.json(data.toString())
 	})
 })
 
 app.get('/getTrans', (req, res) => {
-	let data = fs.readFileSync('translations.txt')
+	let data = fs.readFileSync(path.join(__dirname, 'translations.txt'))
 	res.json(data.toString())
 })
 
